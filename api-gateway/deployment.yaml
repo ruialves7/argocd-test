@@ -22,7 +22,7 @@ spec:
             - name: http
               containerPort: 9191
             - name: http-metrics
-              containerPort: 8081
+              containerPort: 8080
           volumeMounts:
            - name: shared-logs # shared space monitored with Promtail
              mountPath: /app/logs
