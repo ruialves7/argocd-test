@@ -1,0 +1,25 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gateway
+  namespace: k1-poc-dev
+data:
+  gateway-kubernetes.properties: |-
+    server.port: 9191
+    management.server.port: 8081
+    management.endpoints.web.exposure.include: *
+    spring.cloud.gateway.discovery.locator.enabled: true
+    spring.cloud.kubernetes.discovery.all-namespaces: true
+    logging.file.name: /app/logs/log_k1_dev.log
+    logging.level.org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: DEBUG
+    management.endpoint.gateway.enabled: true
+    management.endpoints.web.exposure.include: health,gateway,prometheus
+    spring.cloud.gateway.globalcors.corsConfigurations.[/**].allowedOrigins: *
+    spring.cloud.gateway.globalcors.corsConfigurations.[/**].allowedMethods: GET,POST,PUT,DELETE
+    spring.security.oauth2.resourceserver.jwt.jwk-set-uri: http://keycloak.security.svc.cluster.local/realms/K1-Realm/protocol/openid-connect/certs
+    spring.security.oauth2.resourceserver.jwt.issuer-uri: http://keycloak.security.svc.cluster.local/realms/K1-Realm
+    logging.level.org.springframework.security: TRACE
+    spring.main.allow-bean-definition-overriding: true
+    spring.cloud.gateway.httpserver.wiretap: true
+    spring.cloud.gateway.httpclient.wiretap: true
+    management.endpoint.prometheus.enabled: true 

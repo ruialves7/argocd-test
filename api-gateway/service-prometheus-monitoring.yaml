@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ap-gateway-service-monitor
+  namespace: k1-poc-dev
+  labels:
+    prometheus: main
+spec:
+  namespaceSelector:
+    matchNames:
+      - k1-poc-dev
+  selector:
+    matchLabels:
+      app: api-gateway-app-monitoring
+  endpoints:
+    - port: http-metrics
+      path: /actuator/prometheus

@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-app
+  namespace: k1-poc-dev
+spec:
+  selector:
+    matchLabels:
+      app: api-gateway-app
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+    spec:
+      serviceAccountName: k1-poc-dev-account
+      containers:
+        - name: api-gateway-app
+          image: ruialves0307/api-gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 9191
+            - name: http-metrics
+              containerPort: 8081
+          volumeMounts:
+           - name: shared-logs # shared space monitored with Promtail
+             mountPath: /app/logs
+        - name: promtail
+          image: grafana/promtail:master
+          args:
+            - -config.file=/etc/promtail/promtail.yaml
+          volumeMounts:
+            - name: config
+              mountPath: /etc/promtail
+            - name: shared-logs
+              mountPath: /app/logs
+      volumes:
+        - name: config
+          configMap:
+            name: promtail-api-gateway
+        - name: shared-logs
+          emptyDir: {}

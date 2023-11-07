@@ -1,0 +1,11 @@
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: api-gateway-tgb
+  namespace: k1-poc-dev
+spec:
+  serviceRef:
+    name: api-gateway-svc
+    port: 80
+  targetGroupARN: arn:aws:elasticloadbalancing:eu-west-3:024899085772:targetgroup/api-gateway-tg/00e336bebe34a0b5
+  targetType: ip
